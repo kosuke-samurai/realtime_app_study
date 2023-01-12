@@ -2,7 +2,7 @@
 import create from "zustand";
 import { Session } from "@supabase/supabase-js";
 import { NonNullExpression } from "typescript";
-import {EditedProfile} from '../types/index'
+import {EditedPost, EditedNotice, EditedProfile} from '../types/index'
 
 type State = {
     session: Session | null
@@ -12,6 +12,17 @@ type State = {
     editedProfile: EditedProfile
     updateEditedProfile: (payload: EditedProfile) => void
     resetEditedProfile: () => void
+
+    //Notice用の型
+    editedNotice: EditedNotice
+    updatedEditedNotice: (payload: EditedNotice) => void
+    resetEditedNotice: () => void
+
+    //Post用
+  editedPost: EditedPost
+  updateEditedPost: (payload: EditedPost) => void
+  resetEditedPost: () => void
+
 }
 
 const useStore = create<State>((set) => ({
@@ -29,7 +40,31 @@ const useStore = create<State>((set) => ({
             },
         }),
     resetEditedProfile: () =>
-        set({ editedProfile: { username: '', favorites: '', avatar_url: ''} }),
+        set({ editedProfile: { username: '', favorites: '', avatar_url: '' } }),
+    
+    //Notice用
+    editedNotice: { id: '', content: '' },
+    updatedEditedNotice: (payload) =>
+        set({
+            editedNotice: {
+                id: payload.id,
+                content: payload.content,
+            },
+        }),
+    resetEditedNotice: () => set ({editedNotice: {id: '', content: ''}}),
+    
+    //post用
+    editedPost: { id: '', title: '', post_url: '' },
+    updateEditedPost: (payload) =>
+        set({
+        editedPost: {
+            id: payload.id,
+            title: payload.title,
+            post_url: payload.post_url,
+        },
+        }),
+    resetEditedPost: () =>
+        set({ editedPost: { id: '', title: '', post_url: '' } }),
 }))
 
 export default useStore
